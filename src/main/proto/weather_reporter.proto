@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.github.fouratchaaben.weatherreporter.grpc";
+option java_outer_classname = "WeatherReporterProto";
+
+// gRPC service definition for the weather reporter.
+service WeatherReporter {
+    // Retrieves weather data for a single location and day.
+    rpc GetCityWeatherSingleDay(LocationDate) returns (CityWeatherData);
+
+    // Retrieves weather data for a single location over a date period (inclusive).
+    rpc GetCityWeatherMultipleDays(LocationDatePeriod) returns (stream CityWeatherData);
+}
+
+// Weather data model.
+message Weather {
+    float temperature = 1;  // Temperature in Celsius
+    float humidity = 2;     // Humidity percentage
+    float wind = 3;         // Wind speed in km/h
+}
+
+// Date model.
+message Date {
+    int32 day = 1;    // Day of the month
+    int32 month = 2;  // Month (1-12)
+    int32 year = 3;   // Year
+}
+
+// Location model.
+message Location {
+    string city = 1;     // City name
+    string country = 2;  // Country name
+}
+
+// Model representing a location and a single date.
+message LocationDate {
+    Location location = 1;
+    Date date = 2;
+}
+
+// Model representing a location and a date period.
+message LocationDatePeriod {
+    Location location = 1;
+    Date startDate = 2;
+    Date endDate = 3;
+}
+
+// Weather data for a specific city and date.
+message CityWeatherData {
+    Weather weather = 1;
+    LocationDate locationDate = 2;
+}
